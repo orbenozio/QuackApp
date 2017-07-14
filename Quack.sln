@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quack", "Quack.csproj", "{49DBC3B5-F48E-0C73-0B4C-EA0BCCAF0F41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quack.Editor", "Quack.Editor.csproj", "{CBCEEA48-9BE2-9054-6C82-FAE63FA848FA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{49DBC3B5-F48E-0C73-0B4C-EA0BCCAF0F41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49DBC3B5-F48E-0C73-0B4C-EA0BCCAF0F41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49DBC3B5-F48E-0C73-0B4C-EA0BCCAF0F41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49DBC3B5-F48E-0C73-0B4C-EA0BCCAF0F41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBCEEA48-9BE2-9054-6C82-FAE63FA848FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBCEEA48-9BE2-9054-6C82-FAE63FA848FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBCEEA48-9BE2-9054-6C82-FAE63FA848FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBCEEA48-9BE2-9054-6C82-FAE63FA848FA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
