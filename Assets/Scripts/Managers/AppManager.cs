@@ -13,7 +13,7 @@ public class AppManager : BaseSingleton<AppManager>
     private UILoaderManager _uiLoaderManager;
 
     [SerializeField]
-    private ChatLobbyManager _chatLobbyManagerPFB;
+    private ChatLobbyManager _chatLobbyManagerPFB;    
 
     [SerializeField]
     private PopupManager _popupManagerPFB;
@@ -21,11 +21,15 @@ public class AppManager : BaseSingleton<AppManager>
     [SerializeField]
     private RegistrationManager _registrationManagerPFB;
 
+    [SerializeField]
+    private SceneSelectionManager _sceneSelectionManagerPFB;
+
     #region Private Fields
 
     private ChatLobbyManager _chatLobbyManager;
     private PopupManager _popupManager;
     private RegistrationManager _registrationManager;
+    private SceneSelectionManager _sceneSelectionManager;
 
     #endregion
 
@@ -83,6 +87,16 @@ public class AppManager : BaseSingleton<AppManager>
 
     #endregion
 
+    #region Public Methods
+
+    public void NewChatRequest()
+    {
+        _uiLoaderManager.SetActive(UILoaderManager.eUIType.ChatLobby, false);
+        _uiLoaderManager.SetActive(UILoaderManager.eUIType.SceneSelection, true);
+    }
+
+    #endregion
+
     #region Private Methods
 
     private void initManagers()
@@ -90,6 +104,7 @@ public class AppManager : BaseSingleton<AppManager>
         _registrationManager = instantiateManager<RegistrationManager>(_registrationManagerPFB);
         _chatLobbyManager = instantiateManager<ChatLobbyManager>(_chatLobbyManagerPFB);
         _popupManager = instantiateManager<PopupManager>(_popupManagerPFB);
+        _sceneSelectionManager = instantiateManager<SceneSelectionManager>(_sceneSelectionManagerPFB);
     }
 
     private T instantiateManager<T>(T manager) where T : QuackMonoBehaviour

@@ -285,13 +285,16 @@
     <Compile Include="Assets\Scripts\Managers\ChatLobbyManager.cs" />
     <Compile Include="Assets\Scripts\Managers\PopupManager.cs" />
     <Compile Include="Assets\Scripts\Managers\RegistrationManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\SceneSelectionManager.cs" />
     <Compile Include="Assets\Scripts\Managers\UILoaderManager.cs" />
     <Compile Include="Assets\Scripts\QLogger.cs" />
     <Compile Include="Assets\Scripts\QuackUtils.cs" />
+    <Compile Include="Assets\Scripts\SceneSlot.cs" />
     <Compile Include="Assets\Scripts\ViewControllers\ChatLobby_VC.cs" />
     <Compile Include="Assets\Scripts\ViewControllers\ChatSlot_VC.cs" />
     <Compile Include="Assets\Scripts\ViewControllers\PopupConfirm_VC.cs" />
     <Compile Include="Assets\Scripts\ViewControllers\Registration_VC.cs" />
+    <Compile Include="Assets\Scripts\ViewControllers\SceneSelection_VC.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\GooglePlayGames\Editor\template-AndroidManifest.txt" />

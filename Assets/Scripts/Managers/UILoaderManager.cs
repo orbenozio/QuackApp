@@ -93,5 +93,6 @@ public class UILoaderManager : QuackMonoBehaviour
         Registration,
         ChatLobby,
         Popup,
+        SceneSelection,
     }
 }

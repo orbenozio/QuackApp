@@ -11,6 +11,7 @@ public class ChatLobbyManager : QuackMonoBehaviour
     public void OnNewChatRoomClick()
     {
         Debug.Log("Start new chat");
+        AppManager.Instance.NewChatRequest();
     }
 
     public void OnChatRoomClick(string name)
