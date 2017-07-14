@@ -4,19 +4,58 @@ using UnityEngine;
 
 public delegate void RegistrationDelegte(eRegistrationMethodType reg, bool success, eRegistrationResultType resultType, string message = "");
 
-public static class RegistrationManager
+public class RegistrationManager : QuackMonoBehaviour
 {
-    public static event RegistrationDelegte OnSignInEvent;
-    public static event RegistrationDelegte OnSignOutEvent;
+    #region Events
 
-    #region Public Methods
+    public event RegistrationDelegte OnSignInEvent;
+    public event RegistrationDelegte OnSignOutEvent;
 
-    public static void ActivateServices()
+    #endregion
+
+    #region Inspector
+
+    [SerializeField]
+    private GameObject _registrationUI;
+
+    #endregion
+
+    #region Private Fields
+
+    //private GameObject _registrationGameObject;
+
+    #endregion
+
+    #region Props
+
+    //public GameObject RegistrationGameObject
+    //{
+    //    get
+    //    {
+    //        return _registrationGameObject;
+    //    }
+
+    //    set
+    //    {
+    //        _registrationGameObject = value;
+    //    }
+    //}
+
+    #endregion
+
+    #region Quack Mono Behaviour
+
+    protected override void OnAwake()
     {
-        PlayGamesPlatform.Activate();
+        //_registrationGameObject = Instantiate(_registrationUI);
+        activateServices();
     }
 
-    public static void SignIn(eRegistrationMethodType registrationMethodType)
+    #endregion
+
+    #region Public Methods   
+
+    public void SignIn(eRegistrationMethodType registrationMethodType)
     {
         switch (registrationMethodType)
         {
@@ -32,12 +71,13 @@ public static class RegistrationManager
                         OnSignInEvent(registrationMethodType, false, eRegistrationResultType.UnkownService);
                         return;
                     }
+
                     break;
                 }
         }        
     }
 
-    public static void SignOut(eRegistrationMethodType registrationMethodType)
+    public void SignOut(eRegistrationMethodType registrationMethodType)
     {
         switch (registrationMethodType)
         {
@@ -58,10 +98,19 @@ public static class RegistrationManager
 
     #region Private Methods
 
-    private static void signInGoogle()
+    private void activateServices()
+    {
+        PlayGamesPlatform.Activate();
+    }
+
+    private void signInGoogle()
     {
 #if UNITY_EDITOR
-        OnSignInEvent(eRegistrationMethodType.Google, true, eRegistrationResultType.LogInSuccess);
+        if (OnSignInEvent != null)
+        {
+            OnSignInEvent(eRegistrationMethodType.Google, true, eRegistrationResultType.LogInSuccess);
+        }
+
         return;
 #endif
 
@@ -88,7 +137,7 @@ public static class RegistrationManager
         });
     }
 
-    private static void signOutGoogle()
+    private void signOutGoogle()
     {
         ((PlayGamesPlatform)Social.Active).SignOut();
 
@@ -99,7 +148,6 @@ public static class RegistrationManager
     }
 
     #endregion
-
 }
 
 public enum eRegistrationMethodType

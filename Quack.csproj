@@ -276,13 +276,22 @@
     <Compile Include="Assets\GooglePlayGames\Platforms\PlayGamesClientFactory.cs" />
     <Compile Include="Assets\GooglePlayGames\Platforms\TokenClient.cs" />
     <Compile Include="Assets\GooglePlayGames\PluginVersion.cs" />
-    <Compile Include="Assets\Scripts\BaseSingleton.cs" />
     <Compile Include="Assets\Scripts\HelloWorld.cs" />
-    <Compile Include="Assets\Scripts\PopupManager.cs" />
+    <Compile Include="Assets\Scripts\Infrastructure\BaseSingleton.cs" />
+    <Compile Include="Assets\Scripts\Infrastructure\BaseViewController.cs" />
+    <Compile Include="Assets\Scripts\Infrastructure\IViewController.cs" />
+    <Compile Include="Assets\Scripts\Infrastructure\QuackMonoBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Managers\AppManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\ChatLobbyManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\PopupManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\RegistrationManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\UILoaderManager.cs" />
     <Compile Include="Assets\Scripts\QLogger.cs" />
     <Compile Include="Assets\Scripts\QuackUtils.cs" />
-    <Compile Include="Assets\Scripts\RegistrationManager.cs" />
-    <Compile Include="Assets\Scripts\Temp.cs" />
+    <Compile Include="Assets\Scripts\ViewControllers\ChatLobby_VC.cs" />
+    <Compile Include="Assets\Scripts\ViewControllers\ChatSlot_VC.cs" />
+    <Compile Include="Assets\Scripts\ViewControllers\PopupConfirm_VC.cs" />
+    <Compile Include="Assets\Scripts\ViewControllers\Registration_VC.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\GooglePlayGames\Editor\template-AndroidManifest.txt" />

@@ -7,7 +7,7 @@
 /// 
 /// As a note, this is made as MonoBehaviour because we need Coroutines.
 /// </summary>
-public class BaseSingleton<T> : MonoBehaviour where T : MonoBehaviour
+public class BaseSingleton<T> : QuackMonoBehaviour where T : QuackMonoBehaviour
 {
     private static T _instance;
 
