@@ -68,6 +68,7 @@ public class SceneCharacterSelectionManager : QuackMonoBehaviour
         chatCharacterData.UserId = AppManager.Instance.RegistrationManager.User.Id;
         chatCharacterData.CharacterId = name;
         chatCharacterData.Position = new Vector2(10f, 15f);
+        //chatCharacterData.Key = 
         DatabaseService.Instance.SetUserChatCharacter(_currentChatData.Uuid, chatCharacterData);
     }    
 
