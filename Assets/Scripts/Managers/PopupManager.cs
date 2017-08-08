@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,7 +22,7 @@ public class PopupManager : QuackMonoBehaviour
 
     private void closePopup()
     {
-        QLogger.PrintLog("Close popup Clicked!");
+        QLogger.Log("Close popup Clicked!");
         _popupConfirm.gameObject.SetActive(false);
 
     }

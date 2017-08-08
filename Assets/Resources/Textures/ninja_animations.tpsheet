@@ -1,0 +1,28 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:f708f31a66edc2d1afd52a9926b25e54:6928c4858af93d0cde67eb3ec7c7d8f9:e4050b4aee23668d3781d1afba56dcad$
+#
+:format=40300
+:texture=ninja_animations.png
+:size=512x1024
+:pivotpoints=enabled
+:borders=disabled
+
+disappear_000;1;903;150;120; 0.5;0.5; 0;0;0;0
+disappear_001;153;903;150;120; 0.5;0.5; 0;0;0;0
+disappear_002;305;903;150;120; 0.5;0.5; 0;0;0;0
+disappear_003;1;781;150;120; 0.5;0.5; 0;0;0;0
+disappear_004;153;781;150;120; 0.5;0.5; 0;0;0;0
+disappear_005;305;781;150;120; 0.5;0.5; 0;0;0;0
+disappear_006;1;659;150;120; 0.5;0.5; 0;0;0;0
+disappear_007;153;659;150;120; 0.5;0.5; 0;0;0;0
+disappear_008;305;659;150;120; 0.5;0.5; 0;0;0;0
+disappear_009;1;537;150;120; 0.5;0.5; 0;0;0;0
+disappear_010;153;537;150;120; 0.5;0.5; 0;0;0;0
+disappear_011;305;537;150;120; 0.5;0.5; 0;0;0;0
+disappear_012;1;415;150;120; 0.5;0.5; 0;0;0;0
+disappear_013;153;415;150;120; 0.5;0.5; 0;0;0;0

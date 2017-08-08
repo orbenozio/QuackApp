@@ -1,5 +1,8 @@
-﻿using GooglePlayGames;
+﻿using Assets.Scripts.Data;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public delegate void RegistrationDelegte(eRegistrationMethodType reg, bool success, eRegistrationResultType resultType, string message = "");
@@ -17,6 +20,33 @@ public class RegistrationManager : QuackMonoBehaviour
 
     [SerializeField]
     private GameObject _registrationUI;
+    private string _authcode;
+    private string _token;
+    private string _log;
+    private User _user;
+
+    public string Token
+    {
+        get
+        {
+            return _token;
+        }
+
+        set
+        {
+            _token = value;
+        }
+    }
+
+    public string _email { get; private set; }
+
+    public User User
+    {
+        get
+        {
+            return _user;
+        }
+    }
 
     #endregion
 
@@ -45,9 +75,8 @@ public class RegistrationManager : QuackMonoBehaviour
 
     #region Quack Mono Behaviour
 
-    protected override void OnAwake()
+    protected override void OnStart()
     {
-        //_registrationGameObject = Instantiate(_registrationUI);
         activateServices();
     }
 
@@ -74,7 +103,7 @@ public class RegistrationManager : QuackMonoBehaviour
 
                     break;
                 }
-        }        
+        }
     }
 
     public void SignOut(eRegistrationMethodType registrationMethodType)
@@ -100,41 +129,97 @@ public class RegistrationManager : QuackMonoBehaviour
 
     private void activateServices()
     {
+        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
+         .RequestEmail()
+         .RequestServerAuthCode(false)
+         .RequestIdToken()
+         .Build();
+
+        PlayGamesPlatform.InitializeInstance(config);
+        PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
     }
 
     private void signInGoogle()
     {
-#if UNITY_EDITOR
-        if (OnSignInEvent != null)
-        {
-            OnSignInEvent(eRegistrationMethodType.Google, true, eRegistrationResultType.LogInSuccess);
-        }
-
-        return;
-#endif
-
-        if (Social.localUser.authenticated)
+        if (((PlayGamesLocalUser)Social.localUser).authenticated)
         {
             if (OnSignInEvent != null)
             {
                 OnSignInEvent(eRegistrationMethodType.Google, false, eRegistrationResultType.AlreadyLoggedIn);
-                return;
             }
+
+            return;
         }
+
+#if UNITY_EDITOR
+        _user = new User();
+        _user.Username = "Altarf";
+        _user.Token = "testToken";
+        _user.Id = "testId";
+        _user.Email = "or.benozio@gmail.com";
+        _user.ChatCount = 0;
+        _user.ActiveChats = new Dictionary<string, string>();
+        _user.Invites = new Dictionary<string, string>();
+
+        DatabaseService.Instance.SignInUserEvent += handleSignInUserEvent;
+        DatabaseService.Instance.SignInUser(User);
+
+        //if (OnSignInEvent != null)
+        //{
+        //    OnSignInEvent(eRegistrationMethodType.Google, true, eRegistrationResultType.LogInSuccess);
+        //    return;
+        //}
+#endif
+
+        //@TODO: check if user exists in db
 
         Social.localUser.Authenticate((bool success, string msg) =>
         {
             if (success)
             {
-                OnSignInEvent(eRegistrationMethodType.Google, success, eRegistrationResultType.LogInSuccess);
+                try
+                {
+                    _user = new User();
+                    _user.Email = ((PlayGamesLocalUser)Social.localUser).Email;
+                    _user.Username = ((PlayGamesLocalUser)Social.localUser).userName;
+                    _user.Token = ((PlayGamesLocalUser)Social.localUser).GetIdToken();
+                    _user.Id = ((PlayGamesLocalUser)Social.localUser).id;
+                    _user.ChatCount = 0;
+                    _user.ActiveChats = new Dictionary<string, string>();
+                    _user.Invites = new Dictionary<string, string>();
 
+                    DatabaseService.Instance.SignInUserEvent += handleSignInUserEvent;
+                    DatabaseService.Instance.SignInUser(User);
+                }
+                catch (Exception e)
+                {
+                    if (OnSignInEvent != null)
+                    {
+                        OnSignInEvent(eRegistrationMethodType.Google, true, eRegistrationResultType.LogInFail);
+                        return;
+                    }
+                }
             }
             else
             {
-                OnSignInEvent(eRegistrationMethodType.Google, success, eRegistrationResultType.LogInFail, msg);
+
             }
         });
+    }
+
+    private void handleSignInUserEvent(bool result)
+    {
+        if (OnSignInEvent != null)
+        {
+            OnSignInEvent(eRegistrationMethodType.Google, result, result ? eRegistrationResultType.LogInSuccess : eRegistrationResultType.LogInFail);
+            return;
+        }
+    }
+
+    private UserRequestDelegate HandleSinInUserEvent()
+    {
+        throw new NotImplementedException();
     }
 
     private void signOutGoogle()

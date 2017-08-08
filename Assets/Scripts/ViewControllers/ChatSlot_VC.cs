@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,13 +7,18 @@ using UnityEngine.UI;
 
 public class ChatSlot_VC : BaseViewController
 {
-    public void OnNewChatClick()
-    {
-        AppManager.ChatLobbyManager.OnNewChatRoomClick();
-    }
+    [SerializeField]
+    private Text _chatName;
 
-    public void OnChatClick(Text name)
+    private string _uuid;
+
+    public void Initialize(string uuid, string name)
     {
-        AppManager.ChatLobbyManager.OnChatRoomClick(name.text);
+        _uuid = uuid;
+        _chatName.text = name;
+    }
+    public void OnChat_Click()
+    {
+        AppManager.ChatRoomManager.OnChatRoomClick(_uuid);
     }
 }

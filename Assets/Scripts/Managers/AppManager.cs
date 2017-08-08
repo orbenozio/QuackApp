@@ -1,10 +1,18 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.Data;
+using System;
 using UnityEngine;
 
+
 public class AppManager : BaseSingleton<AppManager>
-{    
+{
+    public delegate void SceneDelegate(SceneData data);
+
+    #region Events
+
+    public event SceneDelegate SceneSelectedEvent;
+
+    #endregion
+
     [Header("Managers")]
     [SerializeField]
     private Transform _managersContainer;
@@ -22,7 +30,13 @@ public class AppManager : BaseSingleton<AppManager>
     private RegistrationManager _registrationManagerPFB;
 
     [SerializeField]
-    private SceneSelectionManager _sceneSelectionManagerPFB;
+    private SceneSelectionManager _sceneSelectionManagerPFB;    
+
+    [SerializeField]
+    private SceneCharacterSelectionManager _characterSelectionManagerPFB;
+
+    [SerializeField]
+    private ChatRoomManager _chatRoomManagerPFB;
 
     #region Private Fields
 
@@ -30,32 +44,8 @@ public class AppManager : BaseSingleton<AppManager>
     private PopupManager _popupManager;
     private RegistrationManager _registrationManager;
     private SceneSelectionManager _sceneSelectionManager;
-
-    #endregion
-
-
-    protected AppManager()
-    {
-    }
-
-    #region Quack Mono Behaviour
-
-    protected override void OnAwake()
-    {
-        initManagers();
-    }
-  
-    protected override void OnStart()
-    {
-        _registrationManager.OnSignInEvent += registrationManager_OnSignInEvent;
-        _uiLoaderManager.SetActive(UILoaderManager.eUIType.Registration, true);
-    }
-
-    protected override void OnDestroyObject()
-    {
-        _registrationManager.OnSignInEvent -= registrationManager_OnSignInEvent;
-
-    }
+    private SceneCharacterSelectionManager _characterSelectionManager;
+    private ChatRoomManager _chatRoomManager;
 
     #endregion
 
@@ -85,26 +75,145 @@ public class AppManager : BaseSingleton<AppManager>
         }
     }
 
+    public SceneCharacterSelectionManager CharacterSelectionManager
+    {
+        get
+        {
+            return _characterSelectionManager;
+        }
+
+        set
+        {
+            _characterSelectionManager = value;
+        }
+    }
+
+    public SceneSelectionManager SceneSelectionManager
+    {
+        get
+        {
+            return _sceneSelectionManager;
+        }
+
+        set
+        {
+            _sceneSelectionManager = value;
+        }
+    }
+
+    public ChatRoomManager ChatRoomManager
+    {
+        get
+        {
+            return _chatRoomManager;
+        }
+
+        set
+        {
+            _chatRoomManager = value;
+        }
+    }
+
+    public UILoaderManager UiLoaderManager
+    {
+        get
+        {
+            return _uiLoaderManager;
+        }
+    }
+
+    public User UserData
+    {
+        get
+        {
+            return this.RegistrationManager.User;
+        }
+    }
+
+    public string ChatUuid
+    {
+        get
+        {
+            return this.ChatRoomManager.ChatUuid;
+        }
+    }
     #endregion
+
+    protected AppManager()
+    {
+    }
+
+    #region Quack Mono Behaviour
+
+    protected override void OnAwake()
+    {
+        initServices();
+        initManagers();        
+    }
+
+    protected override void OnStart()
+    {
+        _registrationManager.OnSignInEvent += registrationManager_OnSignInEvent;
+        _uiLoaderManager.SetActive(UILoaderManager.eUIType.Registration, true);
+    }
+
+    protected override void OnDestroyObject()
+    {
+        _registrationManager.OnSignInEvent -= registrationManager_OnSignInEvent;
+
+    }
+
+    #endregion
+
 
     #region Public Methods
 
     public void NewChatRequest()
     {
-        _uiLoaderManager.SetActive(UILoaderManager.eUIType.ChatLobby, false);
         _uiLoaderManager.SetActive(UILoaderManager.eUIType.SceneSelection, true);
+    }
+
+    public void SceneSelectionRequest(SceneData data)
+    {
+        // Setup
+        _characterSelectionManager.Initialize(data);
+
+        //if (SceneSelectedEvent!=null)
+        //{
+        //    SceneSelectedEvent.Invoke(data);
+        //}     
+        _uiLoaderManager.SetActive(UILoaderManager.eUIType.CharacterSelection, true);
+
+    }
+
+    public void GoToChatLobby()
+    {
+        _uiLoaderManager.SetActive(UILoaderManager.eUIType.ChatLobby, true);
+    }
+
+    public void GoToChatRoom(string chatUuid)
+    {
+        _chatRoomManager.SetupChatRoom(chatUuid);
     }
 
     #endregion
 
     #region Private Methods
 
-    private void initManagers()
+    private void initServices()
     {
+        DatabaseService.Instance.InitializeFirebase();
+    }
+
+
+    private void initManagers()
+    {        
         _registrationManager = instantiateManager<RegistrationManager>(_registrationManagerPFB);
         _chatLobbyManager = instantiateManager<ChatLobbyManager>(_chatLobbyManagerPFB);
         _popupManager = instantiateManager<PopupManager>(_popupManagerPFB);
         _sceneSelectionManager = instantiateManager<SceneSelectionManager>(_sceneSelectionManagerPFB);
+        _characterSelectionManager = instantiateManager<SceneCharacterSelectionManager>(_characterSelectionManagerPFB);
+        _chatRoomManager = instantiateManager<ChatRoomManager>(_chatRoomManagerPFB);
     }
 
     private T instantiateManager<T>(T manager) where T : QuackMonoBehaviour
@@ -129,7 +238,6 @@ public class AppManager : BaseSingleton<AppManager>
         }
 
         _uiLoaderManager.SetActive(UILoaderManager.eUIType.ChatLobby, true);
-        _uiLoaderManager.SetActive(UILoaderManager.eUIType.Registration, false);
     }
 
 

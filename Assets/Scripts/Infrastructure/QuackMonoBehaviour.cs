@@ -92,6 +92,12 @@ public class QuackMonoBehaviour : MonoBehaviour
     {
     }
 
+    public virtual void DestorySelf()
+    {
+        Destroy(this.gameObject);
+    }
+
+
     #endregion
 
 }

@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="firebase_database_url" translatable="false">https://quack-53461818.firebaseio.com</string>
+  <string name="gcm_defaultSenderId" translatable="false">494708365442</string>
+  <string name="google_storage_bucket" translatable="false">quack-53461818.appspot.com</string>
+  <string name="project_id" translatable="false">quack-53461818</string>
+  <string name="google_api_key" translatable="false">AIzaSyCzprDU68_YG4qH1li2sWgLiRjZm6CB-qQ</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCzprDU68_YG4qH1li2sWgLiRjZm6CB-qQ</string>
+  <string name="google_app_id" translatable="false">1:494708365442:android:bfc89b62522bc6ce</string>
+  <string name="default_web_client_id" translatable="false">494708365442-rumab5dpnrfm5mjfr9pgjet0lnfjk9tr.apps.googleusercontent.com</string>
+</resources>
