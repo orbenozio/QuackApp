@@ -1,7 +1,10 @@
 ﻿using Assets.Scripts.Data;
+using Assets.Scripts.Utils;
+using Facebook.Unity;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +12,12 @@ public delegate void RegistrationDelegte(eRegistrationMethodType reg, bool succe
 
 public class RegistrationManager : QuackMonoBehaviour
 {
+    #region Consts
+
+    private readonly List<string> FACEBOOK_READ_PERMISSIONS = new List<string>() { "email", "user_friends" };
+
+    #endregion
+
     #region Events
 
     public event RegistrationDelegte OnSignInEvent;
@@ -74,7 +83,21 @@ public class RegistrationManager : QuackMonoBehaviour
     #endregion
 
     #region Quack Mono Behaviour
+    protected override void OnAwake()
+    {
+        base.OnAwake();
 
+        if (!FB.IsInitialized)
+        {
+            // Initialize the Facebook SDK
+            FB.Init(InitCallback, OnHideUnity);
+        }
+        else
+        {
+            // Already initialized, signal an app activation App Event
+            FB.ActivateApp();
+        }
+    }
     protected override void OnStart()
     {
         activateServices();
@@ -91,6 +114,11 @@ public class RegistrationManager : QuackMonoBehaviour
             case eRegistrationMethodType.Google:
                 {
                     signInGoogle();
+                    break;
+                }
+            case eRegistrationMethodType.Facebook:
+                {
+                    signInFacebook();
                     break;
                 }
             default:
@@ -140,6 +168,29 @@ public class RegistrationManager : QuackMonoBehaviour
         PlayGamesPlatform.Activate();
     }
 
+    private void InitCallback()
+    {
+        if (FB.IsInitialized)
+        {
+            FB.ActivateApp();
+        }
+        else
+        {
+            Debug.Log("Failed to Initialize the Facebook SDK");
+        }
+    }
+
+    private void OnHideUnity(bool isGameShown)
+    {
+        if (!isGameShown)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+    }
     private void signInGoogle()
     {
         if (((PlayGamesLocalUser)Social.localUser).authenticated)
@@ -208,6 +259,62 @@ public class RegistrationManager : QuackMonoBehaviour
         });
     }
 
+    private void signInFacebook()
+    {
+        FB.LogInWithReadPermissions(FACEBOOK_READ_PERMISSIONS, authCallback);
+    }
+
+    private void authCallback(ILoginResult result)
+    {
+        if (FB.IsLoggedIn)
+        {
+            // AccessToken class will have session details
+            var aToken = AccessToken.CurrentAccessToken;
+            // Print current access token's User ID
+            Debug.Log(aToken.UserId);
+            // Print current access token's granted permissions
+            foreach (string perm in aToken.Permissions)
+            {
+                Debug.Log(perm);
+            }
+            FB.API("/me?fields=name,email", HttpMethod.GET, facebookLoginCallback);
+          
+        }
+        else
+        {
+            Debug.Log("User cancelled login");
+        }
+    }
+
+    private void facebookLoginCallback(IGraphResult result)
+    {
+        if (result.Error != null)
+        {
+            QLogger.LogError("Error Response:\n" + result.Error);
+        }
+        else if (!FB.IsLoggedIn)
+        {
+            QLogger.LogError("Login cancelled by Player");
+        }
+        else
+        {
+            IDictionary dict = Facebook.MiniJSON.Json.Deserialize(result.RawResult) as IDictionary;
+            var fbname = dict["name"].ToString();
+
+            _user = new User();
+            _user.Username = dict["name"].ToString();
+            _user.Token = AccessToken.CurrentAccessToken.TokenString;
+            _user.Id = AccessToken.CurrentAccessToken.UserId;
+            _user.Email = dict["email"].ToString();
+            _user.ChatCount = 0;
+            _user.ActiveChats = new Dictionary<string, string>();
+            _user.Invites = new Dictionary<string, string>();
+
+            DatabaseService.Instance.SignInUserEvent += handleSignInUserEvent;
+            DatabaseService.Instance.SignInUser(User);
+        }
+    }
+
     private void handleSignInUserEvent(bool result)
     {
         if (OnSignInEvent != null)
@@ -238,6 +345,7 @@ public class RegistrationManager : QuackMonoBehaviour
 public enum eRegistrationMethodType
 {
     Google,
+    Facebook,
 }
 
 public enum eRegistrationResultType
