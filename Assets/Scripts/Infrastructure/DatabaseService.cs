@@ -15,7 +15,7 @@ public delegate void SceneRequestDelegate(bool result, Dictionary<string, SceneD
 public delegate void CharacterRequestDelegate(bool result, Dictionary<string, CharacterData> data);
 public delegate void ActiveChatRequestDelegate(bool result, Dictionary<string, string> data);
 public delegate void InviteChatRequestDelegate(bool result, Dictionary<string, string> data);
-public delegate void UserRequestDelegate(bool result);
+public delegate void UserRequestDelegate(bool result, User data = null);
 public delegate void ChatCharacterDelegate(bool result, List<ChatCharacterData> data = null);
 
 public class DatabaseService : BaseSingleton<DatabaseService>
@@ -37,6 +37,7 @@ public class DatabaseService : BaseSingleton<DatabaseService>
     public event SceneRequestDelegate GetScenesEvent;
     public event CharacterRequestDelegate GetCharactersEvent;
     public event UserRequestDelegate SignInUserEvent;
+    public event UserRequestDelegate GetUserDataEvent;
     public event ActiveChatRequestDelegate GetActiveChatEvent;
 
     public event InviteChatRequestDelegate GetInviteChatEvent;
@@ -117,7 +118,8 @@ public class DatabaseService : BaseSingleton<DatabaseService>
                 }
                 else
                 {
-                    fireSignInUserEvent(true);
+                    var data = JSONSerialization<User>.CreateFromJSON(task.Result.GetRawJsonValue());
+                    fireSignInUserEvent(true, data);
                 }
             }
             else if (task.IsFaulted)
@@ -134,13 +136,11 @@ public class DatabaseService : BaseSingleton<DatabaseService>
         {
             if (task.IsCompleted)
             {
-
+                SignInUser(user);
             }
             else if (task.IsFaulted)
             {
             }
-
-            fireSignInUserEvent(!task.IsFaulted);
         });
     }
 
@@ -249,6 +249,26 @@ public class DatabaseService : BaseSingleton<DatabaseService>
         });
     }
 
+    public void GetUserDataById(string userId)
+    {
+        _databaseRef.Child(DB_NODE_USERS).Child(userId).GetValueAsync().ContinueWith(task =>
+        {
+            User data = null;
+            if (task.IsCompleted)
+            {
+                data = JSONSerialization<User>.CreateFromJSON(task.Result.GetRawJsonValue());                
+            }
+            else if (task.IsFaulted)
+            {
+            }
+
+            if (GetUserDataEvent != null)
+            {
+                GetUserDataEvent.Invoke(task.IsCompleted, data);
+            }
+        });
+    }
+
     public void SaveRecord(RecordData data)
     {
         data.CreatedUTC = DateTime.UtcNow.ToShortDateString();
@@ -293,11 +313,11 @@ public class DatabaseService : BaseSingleton<DatabaseService>
 
     }
 
-    private void fireSignInUserEvent(bool success)
+    private void fireSignInUserEvent(bool success, User data)
     {
         if (SignInUserEvent != null)
         {
-            SignInUserEvent.Invoke(success);
+            SignInUserEvent.Invoke(success, data);
         }
     }
 

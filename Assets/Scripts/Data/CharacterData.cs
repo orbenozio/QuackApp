@@ -18,5 +18,7 @@ namespace Assets.Scripts.Data
 
         [JsonProperty("animations")]
         public Dictionary<string, bool> animations;
+
+        public bool IsFullScreen;
     }
 }

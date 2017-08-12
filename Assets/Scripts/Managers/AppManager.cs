@@ -153,8 +153,17 @@ public class AppManager : BaseSingleton<AppManager>
 
     protected override void OnStart()
     {
-        _registrationManager.OnSignInEvent += registrationManager_OnSignInEvent;
-        _uiLoaderManager.SetActive(UILoaderManager.eUIType.Registration, true);
+        // Check if user already logged in
+        if (_registrationManager.IsUserLoggedIn)
+        {
+            // Show chat lobby
+            _uiLoaderManager.SetActive(UILoaderManager.eUIType.ChatLobby, true);
+        }
+        else
+        {
+            _registrationManager.OnSignInEvent += registrationManager_OnSignInEvent;
+            _uiLoaderManager.SetActive(UILoaderManager.eUIType.Registration, true);
+        }
     }
 
     protected override void OnDestroyObject()

@@ -14,6 +14,7 @@ namespace Assets.Scripts.ViewControllers
     {
         private const int FREQUENCY = 8000;
         private const int AUDIO_TIME_LIMIT_IN_SEC = 300;
+        protected readonly int PHASE_ONE_HASH = Animator.StringToHash("phase_1");
 
         [SerializeField]
         private Animator _animator;
@@ -24,6 +25,8 @@ namespace Assets.Scripts.ViewControllers
 
 
         private ChatCharacterData _characterData;
+        private bool _press;
+        private bool _recording;
 
         public void Initialize(ChatCharacterData characterData)
         {
@@ -33,7 +36,14 @@ namespace Assets.Scripts.ViewControllers
             overrideController.runtimeAnimatorController = _animator.runtimeAnimatorController;
 
             // Put this line at the end because when you assign a controller on an Animator, unity rebind all the animated properties 
-            _animator.runtimeAnimatorController = overrideController;
+            _animator.runtimeAnimatorController = overrideController;            
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+
+            _animator.SetTrigger(PHASE_ONE_HASH);
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -48,12 +58,14 @@ namespace Assets.Scripts.ViewControllers
 
         public void StartMicrophone()
         {
+            _recording = true;
+
 #if UNITY_EDITOR
             _audioSource.clip = AudioClip.Create("playRecordClip", 10, 1, FREQUENCY, false);
 #else
             _audioSource.clip = Microphone.Start(null, false, AUDIO_TIME_LIMIT_IN_SEC, FREQUENCY);
+            while (!(Microphone.GetPosition(null) > 0)) { } // Wait until the recording has started
 #endif
-            // while (!(Microphone.GetPosition(null) > 0)) { } // Wait until the recording has started
         }
 
         public void StopMicrophone()

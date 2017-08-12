@@ -63,14 +63,14 @@ public class ChatRoom_VC : BaseViewController
     private void ChatRoomManager_ChatCharacterDataEvent(List<ChatCharacterData> data = null)
     {
         // set background
-        _backgroundImage.color = new Color(Random.value, Random.value, Random.value, 1.0f);
+        _backgroundImage.color = Color.gray;
 
         // set user position
         foreach (var characterData in data)
         {
             var instance = Instantiate(_chatCharacterPFB);
             instance.gameObject.name = characterData.UserId;
-            instance.transform.position = new Vector3(characterData.Position.x, characterData.Position.y, 0f);
+            //instance.transform.position = new Vector3(characterData.Position.x, characterData.Position.y, 0f);
             instance.transform.SetParent(_container, false);
             //instance.SlotClickEvent += handleSlotClickEvent;
             instance.Initialize(characterData);

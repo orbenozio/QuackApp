@@ -57,6 +57,14 @@ public class RegistrationManager : QuackMonoBehaviour
         }
     }
 
+    public bool IsUserLoggedIn
+    {
+        get
+        {
+            return FB.IsLoggedIn;
+        }
+    }
+
     #endregion
 
     #region Private Fields
@@ -205,7 +213,7 @@ public class RegistrationManager : QuackMonoBehaviour
 
 #if UNITY_EDITOR
         _user = new User();
-        _user.Username = "Altarf";
+        _user.Name = "Altarf";
         _user.Token = "testToken";
         _user.Id = "testId";
         _user.Email = "or.benozio@gmail.com";
@@ -233,7 +241,7 @@ public class RegistrationManager : QuackMonoBehaviour
                 {
                     _user = new User();
                     _user.Email = ((PlayGamesLocalUser)Social.localUser).Email;
-                    _user.Username = ((PlayGamesLocalUser)Social.localUser).userName;
+                    _user.Name = ((PlayGamesLocalUser)Social.localUser).userName;
                     _user.Token = ((PlayGamesLocalUser)Social.localUser).GetIdToken();
                     _user.Id = ((PlayGamesLocalUser)Social.localUser).id;
                     _user.ChatCount = 0;
@@ -261,29 +269,31 @@ public class RegistrationManager : QuackMonoBehaviour
 
     private void signInFacebook()
     {
-        FB.LogInWithReadPermissions(FACEBOOK_READ_PERMISSIONS, authCallback);
+        if (!FB.IsLoggedIn)
+        {
+            FB.LogInWithReadPermissions(FACEBOOK_READ_PERMISSIONS, authCallback);
+        }
+        else
+        {
+            loginSuccess();
+        }
     }
 
     private void authCallback(ILoginResult result)
     {
         if (FB.IsLoggedIn)
         {
-            // AccessToken class will have session details
-            var aToken = AccessToken.CurrentAccessToken;
-            // Print current access token's User ID
-            Debug.Log(aToken.UserId);
-            // Print current access token's granted permissions
-            foreach (string perm in aToken.Permissions)
-            {
-                Debug.Log(perm);
-            }
-            FB.API("/me?fields=name,email", HttpMethod.GET, facebookLoginCallback);
-          
+            loginSuccess();
         }
         else
         {
             Debug.Log("User cancelled login");
         }
+    }
+
+    private void loginSuccess()
+    {
+        FB.API("/me?fields=name,email", HttpMethod.GET, facebookLoginCallback);
     }
 
     private void facebookLoginCallback(IGraphResult result)
@@ -298,25 +308,37 @@ public class RegistrationManager : QuackMonoBehaviour
         }
         else
         {
-            IDictionary dict = Facebook.MiniJSON.Json.Deserialize(result.RawResult) as IDictionary;
-            var fbname = dict["name"].ToString();
 
+            IDictionary dict = Facebook.MiniJSON.Json.Deserialize(result.RawResult) as IDictionary;
             _user = new User();
-            _user.Username = dict["name"].ToString();
             _user.Token = AccessToken.CurrentAccessToken.TokenString;
             _user.Id = AccessToken.CurrentAccessToken.UserId;
             _user.Email = dict["email"].ToString();
+            _user.Name = dict["name"].ToString();
             _user.ChatCount = 0;
-            _user.ActiveChats = new Dictionary<string, string>();
-            _user.Invites = new Dictionary<string, string>();
 
             DatabaseService.Instance.SignInUserEvent += handleSignInUserEvent;
             DatabaseService.Instance.SignInUser(User);
         }
     }
 
-    private void handleSignInUserEvent(bool result)
+    private void handleSignInUserEvent(bool result, User data = null)
     {
+        if (data != null)
+        {
+            _user = data;
+
+            if (_user.ActiveChats == null)
+            {
+                _user.ActiveChats = new Dictionary<string, string>();
+            }
+
+            if (_user.Invites == null)
+            {
+                _user.Invites = new Dictionary<string, string>();
+            }
+        }
+
         if (OnSignInEvent != null)
         {
             OnSignInEvent(eRegistrationMethodType.Google, result, result ? eRegistrationResultType.LogInSuccess : eRegistrationResultType.LogInFail);
