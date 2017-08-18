@@ -151,9 +151,6 @@
     <Reference Include="Google.JarResolver">
       <HintPath>Assets\PlayServicesResolver\Editor\Google.JarResolver.dll</HintPath>
     </Reference>
-    <Reference Include="Google.VersionHandler_v1.2.31.0">
-      <HintPath>Assets\PlayServicesResolver\Editor\Google.VersionHandler_v1.2.31.0.dll</HintPath>
-    </Reference>
     <Reference Include="Facebook.Unity">
       <HintPath>Assets\FacebookSDK\Plugins\Facebook.Unity.dll</HintPath>
     </Reference>
@@ -168,6 +165,9 @@
     </Reference>
     <Reference Include="Facebook.Unity.Settings">
       <HintPath>Assets\FacebookSDK\Plugins\Settings\Facebook.Unity.Settings.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.VersionHandler">
+      <HintPath>Assets\PlayServicesResolver\Editor\Google.VersionHandler.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -203,8 +203,8 @@
   <ItemGroup>
     <None Include="Assets\FacebookSDK\link.xml" />
     <None Include="Assets\Firebase\Editor\FirebaseAnalytics.txt" />
-    <None Include="Assets\Firebase\Editor\FirebaseAuth_v4.0.2_manifest.txt" />
-    <None Include="Assets\Firebase\Editor\FirebaseDatabase_v4.0.2_manifest.txt" />
+    <None Include="Assets\Firebase\Editor\FirebaseAuth.txt" />
+    <None Include="Assets\Firebase\Editor\FirebaseDatabase.txt" />
     <None Include="Assets\Firebase\Plugins\Http\link.xml" />
     <None Include="Assets\Firebase\Plugins\link.xml" />
     <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-analytics-unity\maven-metadata.xml" />

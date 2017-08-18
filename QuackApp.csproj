@@ -347,8 +347,8 @@
   <ItemGroup>
     <None Include="Assets\FacebookSDK\link.xml" />
     <None Include="Assets\Firebase\Editor\FirebaseAnalytics.txt" />
-    <None Include="Assets\Firebase\Editor\FirebaseAuth_v4.0.2_manifest.txt" />
-    <None Include="Assets\Firebase\Editor\FirebaseDatabase_v4.0.2_manifest.txt" />
+    <None Include="Assets\Firebase\Editor\FirebaseAuth.txt" />
+    <None Include="Assets\Firebase\Editor\FirebaseDatabase.txt" />
     <None Include="Assets\Firebase\Plugins\Http\link.xml" />
     <None Include="Assets\Firebase\Plugins\link.xml" />
     <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-analytics-unity\maven-metadata.xml" />
