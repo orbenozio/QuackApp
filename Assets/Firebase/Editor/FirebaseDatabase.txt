@@ -24,13 +24,13 @@ Assets/Firebase/Editor/FirebaseAuth_v1.0.1_manifest.txt
 Assets/Firebase/Editor/FirebaseAuth_v1.1.0_manifest.txt
 Assets/Firebase/Editor/FirebaseAuth_v1.1.1_manifest.txt
 Assets/Firebase/Editor/FirebaseAuth_v1.1.2_manifest.txt
-Assets/Firebase/Editor/FirebaseAuth_v4.0.2_manifest.txt
+Assets/Firebase/Editor/FirebaseAuth.txt
 Assets/Firebase/Editor/FirebaseDatabase_v1.0.0_manifest.txt
 Assets/Firebase/Editor/FirebaseDatabase_v1.0.1_manifest.txt
 Assets/Firebase/Editor/FirebaseDatabase_v1.1.0_manifest.txt
 Assets/Firebase/Editor/FirebaseDatabase_v1.1.1_manifest.txt
 Assets/Firebase/Editor/FirebaseDatabase_v1.1.2_manifest.txt
-Assets/Firebase/Editor/FirebaseDatabase_v4.0.2_manifest.txt
+Assets/Firebase/Editor/FirebaseDatabase.txt
 Assets/Firebase/Editor/generate_xml_from_google_services_json.exe
 Assets/Firebase/Editor/generate_xml_from_google_services_json.py
 Assets/Firebase/Plugins/Firebase.App.dll
@@ -52,7 +52,7 @@ Assets/Firebase/m2repository/com/google/firebase/firebase-auth-unity/4.0.2/fireb
 Assets/Firebase/m2repository/com/google/firebase/firebase-auth-unity/maven-metadata.xml
 Assets/PlayServicesResolver/Editor/Google.IOSResolver.dll
 Assets/PlayServicesResolver/Editor/Google.JarResolver.dll
-Assets/PlayServicesResolver/Editor/Google.VersionHandler_v1.2.31.0.dll
+Assets/PlayServicesResolver/Editor/Google.VersionHandler.dll
 Assets/PlayServicesResolver/Editor/play-services-resolver.txt
 Assets/PlayServicesResolver/generate_gradle_prebuild.exe
 Assets/PlayServicesResolver/generate_gradle_prebuild.py
