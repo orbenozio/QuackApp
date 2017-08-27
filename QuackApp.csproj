@@ -100,9 +100,6 @@
     <Reference Include="Firebase.App">
       <HintPath>Assets\Firebase\Plugins\Firebase.App.dll</HintPath>
     </Reference>
-    <Reference Include="Firebase.Auth">
-      <HintPath>Assets\Firebase\Plugins\Firebase.Auth.dll</HintPath>
-    </Reference>
     <Reference Include="Firebase.Database">
       <HintPath>Assets\Firebase\Plugins\Firebase.Database.dll</HintPath>
     </Reference>
@@ -347,12 +344,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\FacebookSDK\link.xml" />
-    <None Include="Assets\Firebase\Editor\FirebaseAuth_v4.0.3_manifest.txt" />
     <None Include="Assets\Firebase\Editor\FirebaseDatabase_v4.0.3_manifest.txt" />
     <None Include="Assets\Firebase\Plugins\Http\link.xml" />
     <None Include="Assets\Firebase\Plugins\link.xml" />
     <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-app-unity\maven-metadata.xml" />
-    <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-auth-unity\maven-metadata.xml" />
     <None Include="Assets\GooglePlayGames\Editor\template-AndroidManifest.txt" />
     <None Include="Assets\GooglePlayGames\Editor\template-Constants.txt" />
     <None Include="Assets\GooglePlayGames\Editor\template-GameInfo.txt" />

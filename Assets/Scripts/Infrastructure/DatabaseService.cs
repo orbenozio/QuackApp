@@ -1,7 +1,6 @@
 ﻿using Assets.Scripts.Data;
 using Assets.Scripts.Utils;
 using Firebase;
-using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Unity.Editor;
 using GooglePlayGames;
