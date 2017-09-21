@@ -31,5 +31,10 @@ public class Registration_VC : BaseViewController
         AppManager.RegistrationManager.SignIn(eRegistrationMethodType.Google);
     }
 
+    public void OnSignInFaecbookClick()
+    {
+        AppManager.RegistrationManager.SignIn(eRegistrationMethodType.Facebook);
+    }
+
     #endregion
 }

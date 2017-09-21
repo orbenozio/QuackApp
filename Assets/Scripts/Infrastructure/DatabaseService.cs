@@ -14,7 +14,7 @@ public delegate void SceneRequestDelegate(bool result, Dictionary<string, SceneD
 public delegate void CharacterRequestDelegate(bool result, Dictionary<string, CharacterData> data);
 public delegate void ActiveChatRequestDelegate(bool result, Dictionary<string, string> data);
 public delegate void InviteChatRequestDelegate(bool result, Dictionary<string, string> data);
-public delegate void UserRequestDelegate(bool result);
+public delegate void UserRequestDelegate(bool result, User userData = null);
 public delegate void ChatCharacterDelegate(bool result, List<ChatCharacterData> data = null);
 
 public class DatabaseService : BaseSingleton<DatabaseService>
@@ -36,6 +36,8 @@ public class DatabaseService : BaseSingleton<DatabaseService>
     public event SceneRequestDelegate GetScenesEvent;
     public event CharacterRequestDelegate GetCharactersEvent;
     public event UserRequestDelegate SignInUserEvent;
+    public event UserRequestDelegate GetUserDataEvent;
+    public event UserRequestDelegate CreateUserDataEvent;
     public event ActiveChatRequestDelegate GetActiveChatEvent;
 
     public event InviteChatRequestDelegate GetInviteChatEvent;
@@ -123,25 +125,7 @@ public class DatabaseService : BaseSingleton<DatabaseService>
             {
             }
         });
-    }
-
-    public void CreateNewUser(User user)
-    {
-        string json = JsonUtility.ToJson(user);
-
-        _databaseRef.Child(DB_NODE_USERS).Child(user.Id).SetRawJsonValueAsync(json).ContinueWith(task =>
-        {
-            if (task.IsCompleted)
-            {
-
-            }
-            else if (task.IsFaulted)
-            {
-            }
-
-            fireSignInUserEvent(!task.IsFaulted);
-        });
-    }
+    } 
 
     public void CreateChatRoom(ChatData data)
     {
@@ -260,6 +244,55 @@ public class DatabaseService : BaseSingleton<DatabaseService>
         });
     }
 
+    #region User Data
+
+    public void GetUserDataById(string id)
+    {
+        _databaseRef.Child(DB_NODE_USERS).Child(id).GetValueAsync().ContinueWith(task =>
+        {
+            User userdata = null;
+            if (task.IsCompleted)
+            {
+                if (task.Result.Exists)
+                {
+                    userdata = JSONSerialization<User>.CreateFromJSON(task.Result.GetRawJsonValue());
+                }
+            }
+            else if (task.IsFaulted)
+            {
+            }
+
+            if (GetUserDataEvent != null)
+            {
+                GetUserDataEvent.Invoke(task.IsCompleted, userdata);
+            }
+        });
+    }
+
+    public void CreateNewUser(User user)
+    {
+        string json = JsonUtility.ToJson(user);
+
+        _databaseRef.Child(DB_NODE_USERS).Child(user.Id).SetRawJsonValueAsync(json).ContinueWith(task =>
+        {
+            User userData = null;
+
+            //if (task.IsCompleted)
+            //{
+            //    //userdata = JSONSerialization<User>.CreateFromJSON(task.Result.GetRawJsonValue());
+            //}
+            //else if (task.IsFaulted)
+            //{
+            //}
+
+            if (CreateUserDataEvent != null)
+            {
+                CreateUserDataEvent.Invoke(task.IsCompleted, userData);
+            }
+        });
+    }
+
+    #endregion
 
     #endregion
 
@@ -296,7 +329,7 @@ public class DatabaseService : BaseSingleton<DatabaseService>
     {
         if (SignInUserEvent != null)
         {
-            SignInUserEvent.Invoke(success);
+           // SignInUserEvent.Invoke(success);
         }
     }
 

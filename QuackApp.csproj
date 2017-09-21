@@ -310,10 +310,10 @@
     <Compile Include="Assets\Scripts\Data\CharacterData.cs" />
     <Compile Include="Assets\Scripts\Data\ChatCharacterData.cs" />
     <Compile Include="Assets\Scripts\Data\ChatData.cs" />
+    <Compile Include="Assets\Scripts\Data\Client.cs" />
     <Compile Include="Assets\Scripts\Data\RecordData.cs" />
     <Compile Include="Assets\Scripts\Data\SceneData.cs" />
     <Compile Include="Assets\Scripts\Data\User.cs" />
-    <Compile Include="Assets\Scripts\HelloWorld.cs" />
     <Compile Include="Assets\Scripts\Infrastructure\BaseSingleton.cs" />
     <Compile Include="Assets\Scripts\Infrastructure\BaseViewController.cs" />
     <Compile Include="Assets\Scripts\Infrastructure\DatabaseService.cs" />
@@ -328,7 +328,6 @@
     <Compile Include="Assets\Scripts\Managers\SceneCharacterSelectionManager.cs" />
     <Compile Include="Assets\Scripts\Managers\SceneSelectionManager.cs" />
     <Compile Include="Assets\Scripts\Managers\UILoaderManager.cs" />
-    <Compile Include="Assets\Scripts\QuackUtils.cs" />
     <Compile Include="Assets\Scripts\SceneSlot.cs" />
     <Compile Include="Assets\Scripts\Utils\JSONSerialization.cs" />
     <Compile Include="Assets\Scripts\Utils\QLogger.cs" />

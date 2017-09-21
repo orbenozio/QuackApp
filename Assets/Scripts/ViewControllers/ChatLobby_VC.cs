@@ -38,8 +38,9 @@ public class ChatLobby_VC : BaseViewController
     protected override void OnDisableObject()
     {
         base.OnDisableObject();
-        DatabaseService.Instance.GetActiveChatEvent -= HandleGetActiveChatEvent;
-        DatabaseService.Instance.GetInviteChatEvent -= HandleGetInviteChatEvent;
+
+        DatabaseService.Instance.GetActiveChatEvent -= handleGetActiveChatEvent;
+        DatabaseService.Instance.GetInviteChatEvent -= handleGetInviteChatEvent;
 
         foreach (var item in _userChats)
         {
@@ -68,21 +69,19 @@ public class ChatLobby_VC : BaseViewController
 
     private void setUserActiveChats()
     {
-        var userId = AppManager.RegistrationManager.User.Id;
-        DatabaseService.Instance.GetActiveChatEvent += HandleGetActiveChatEvent;
-        DatabaseService.Instance.GetUserActiveChats(userId);
+        DatabaseService.Instance.GetActiveChatEvent += handleGetActiveChatEvent;
+        DatabaseService.Instance.GetUserActiveChats(Client.UserData.Id);
     }
 
     private void setUserInvites()
     {
-        var userId = AppManager.Instance.RegistrationManager.User.Id;
-        DatabaseService.Instance.GetInviteChatEvent += HandleGetInviteChatEvent;
-        DatabaseService.Instance.GetUserInviteChats(userId);
+        DatabaseService.Instance.GetInviteChatEvent += handleGetInviteChatEvent;
+        DatabaseService.Instance.GetUserInviteChats(Client.UserData.Id);
     }
     
-    private void HandleGetActiveChatEvent(bool result, Dictionary<string, string> data)
+    private void handleGetActiveChatEvent(bool result, Dictionary<string, string> data)
     {
-        DatabaseService.Instance.GetActiveChatEvent -= HandleGetActiveChatEvent;
+        DatabaseService.Instance.GetActiveChatEvent -= handleGetActiveChatEvent;
 
         if (!result)
         {
@@ -107,9 +106,9 @@ public class ChatLobby_VC : BaseViewController
 
     }
 
-    private void HandleGetInviteChatEvent(bool result, Dictionary<string, string> data)
+    private void handleGetInviteChatEvent(bool result, Dictionary<string, string> data)
     {
-        DatabaseService.Instance.GetInviteChatEvent -= HandleGetInviteChatEvent;
+        DatabaseService.Instance.GetInviteChatEvent -= handleGetInviteChatEvent;
 
         if (!result)
         {

@@ -5,6 +5,12 @@ namespace Assets.Scripts.Data
 {
     public class User
     {
+        [JsonProperty("first_name")]
+        public string FirstName;
+
+        [JsonProperty("last_name")]
+        public string LastName;
+
         [JsonProperty("user_name")]
         public string Username;
 

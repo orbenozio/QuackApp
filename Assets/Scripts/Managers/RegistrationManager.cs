@@ -1,4 +1,6 @@
 ﻿using Assets.Scripts.Data;
+using Assets.Scripts.Utils;
+using Facebook.Unity;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using System;
@@ -9,6 +11,12 @@ public delegate void RegistrationDelegte(eRegistrationMethodType reg, bool succe
 
 public class RegistrationManager : QuackMonoBehaviour
 {
+    #region Consts
+
+    private readonly List<string> FAECBOOK_READ_PERMISSIONS = new List<string>() { "public_profile", "email", "user_friends" };
+
+    #endregion
+
     #region Events
 
     public event RegistrationDelegte OnSignInEvent;
@@ -75,6 +83,23 @@ public class RegistrationManager : QuackMonoBehaviour
 
     #region Quack Mono Behaviour
 
+    protected override void OnAwake()
+    {
+        base.OnAwake();
+
+        // Initialize Facebook
+        if (!FB.IsInitialized)
+        {
+            // Initialize the Facebook SDK
+            FB.Init(initCallback, onHideUnity);
+        }
+        else
+        {
+            // Already initialized, signal an app activation App Event
+            FB.ActivateApp();
+        }
+    }
+
     protected override void OnStart()
     {
         activateServices();
@@ -91,6 +116,11 @@ public class RegistrationManager : QuackMonoBehaviour
             case eRegistrationMethodType.Google:
                 {
                     signInGoogle();
+                    break;
+                }
+            case eRegistrationMethodType.Facebook:
+                {
+                    signInFacebook();
                     break;
                 }
             default:
@@ -127,6 +157,104 @@ public class RegistrationManager : QuackMonoBehaviour
 
     #region Private Methods
 
+    #region Faecbook
+
+    private void initCallback()
+    {
+        if (FB.IsInitialized)
+        {
+            // Signal an app activation App Event
+            FB.ActivateApp();
+            // Continue with Facebook SDK
+            // ...
+        }
+        else
+        {
+            Debug.Log("Failed to Initialize the Facebook SDK");
+        }
+    }
+
+    private void onHideUnity(bool isGameShown)
+    {
+        if (!isGameShown)
+        {
+            // Pause the game - we will need to hide
+            Time.timeScale = 0;
+        }
+        else
+        {
+            // Resume the game - we're getting focus again
+            Time.timeScale = 1;
+        }
+    }
+
+    private void signInFacebook()
+    {
+        FB.LogInWithReadPermissions(FAECBOOK_READ_PERMISSIONS, authCallback);
+    }
+
+
+    private void authCallback(ILoginResult result)
+    {
+        if (FB.IsLoggedIn)
+        {
+            // If exist in DB get the user data
+            var aToken = AccessToken.CurrentAccessToken;
+            
+            DatabaseService.Instance.GetUserDataEvent += handleGetUserDataEvent;
+            DatabaseService.Instance.GetUserDataById(aToken.UserId);
+        }
+        else
+        {
+            Debug.Log("User cancelled login");
+        }
+    }
+
+    private void handleGetUserDataEvent(bool result, User userData)
+    {
+        DatabaseService.Instance.GetUserDataEvent -= handleGetUserDataEvent;
+
+        if (userData == null)
+        {
+            // Create new user
+            FB.API("/me?fields=first_name,last_name,email", HttpMethod.GET, createNewUserData);
+            return;
+        }
+
+        Client.UserData = userData;
+
+        if (OnSignInEvent != null)
+        {
+            OnSignInEvent(eRegistrationMethodType.Facebook, true, eRegistrationResultType.LogInSuccess);
+        }
+    }
+
+    private void createNewUserData(IGraphResult result)
+    {
+        Client.UserData = new User();
+
+        var userData = JSONSerialization<User>.CreateFromJSON(result.RawResult);
+        Client.UserData = userData;
+        Client.UserData.Token = AccessToken.CurrentAccessToken.TokenString;
+        Client.UserData.ChatCount = 0;
+        Client.UserData.ActiveChats = new Dictionary<string, string>();
+        Client.UserData.Invites = new Dictionary<string, string>();
+
+        DatabaseService.Instance.CreateUserDataEvent += handleCreateUserDataEvent;
+        DatabaseService.Instance.CreateNewUser(Client.UserData);
+    }
+
+    private void handleCreateUserDataEvent(bool result, User userData = null)
+    {
+        DatabaseService.Instance.CreateUserDataEvent -= handleCreateUserDataEvent;
+
+        if (OnSignInEvent != null)
+        {
+            OnSignInEvent(eRegistrationMethodType.Facebook, true, eRegistrationResultType.LogInSuccess);
+        }
+    }
+
+    #endregion
     private void activateServices()
     {
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
@@ -162,8 +290,8 @@ public class RegistrationManager : QuackMonoBehaviour
         _user.ActiveChats = new Dictionary<string, string>();
         _user.Invites = new Dictionary<string, string>();
 
-        DatabaseService.Instance.SignInUserEvent += handleSignInUserEvent;
-        DatabaseService.Instance.SignInUser(User);
+        //DatabaseService.Instance.SignInUserEvent += handleSignInUserEvent;
+        //DatabaseService.Instance.SignInUser(User);
 
         //if (OnSignInEvent != null)
         //{
@@ -189,8 +317,8 @@ public class RegistrationManager : QuackMonoBehaviour
                     _user.ActiveChats = new Dictionary<string, string>();
                     _user.Invites = new Dictionary<string, string>();
 
-                    DatabaseService.Instance.SignInUserEvent += handleSignInUserEvent;
-                    DatabaseService.Instance.SignInUser(User);
+                    //DatabaseService.Instance.SignInUserEvent += handleSignInUserEvent;
+                    //DatabaseService.Instance.SignInUser(User);
                 }
                 catch (Exception e)
                 {
@@ -208,6 +336,7 @@ public class RegistrationManager : QuackMonoBehaviour
         });
     }
 
+    
     private void handleSignInUserEvent(bool result)
     {
         if (OnSignInEvent != null)
@@ -217,10 +346,10 @@ public class RegistrationManager : QuackMonoBehaviour
         }
     }
 
-    private UserRequestDelegate HandleSinInUserEvent()
-    {
-        throw new NotImplementedException();
-    }
+    //private UserRequestDelegate HandleSinInUserEvent()
+    //{
+    //    throw new NotImplementedException();
+    //}
 
     private void signOutGoogle()
     {
@@ -238,6 +367,7 @@ public class RegistrationManager : QuackMonoBehaviour
 public enum eRegistrationMethodType
 {
     Google,
+    Facebook,
 }
 
 public enum eRegistrationResultType

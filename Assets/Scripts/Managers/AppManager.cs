@@ -165,7 +165,6 @@ public class AppManager : BaseSingleton<AppManager>
 
     #endregion
 
-
     #region Public Methods
 
     public void NewChatRequest()

@@ -75,8 +75,8 @@ public class SceneCharacterSelection_VC : BaseViewController
         _characters = new Dictionary<string, CharacterData>();
         _characterSlots = new Dictionary<string, CharacterSlot_VC>();
 
-        var userData = AppManager.RegistrationManager.User;
-        var creatorName = userData.Username;
+        var userData = Client.UserData;
+        var creatorName = userData.FirstName + "_" + userData.LastName;
         var sceneName = _characterSelectionManager.SelectedSceneData.name;
         var chatCount = userData.ChatCount;
         var chatName = string.Format(CHAT_ROOM_FORAMT, creatorName, sceneName, chatCount + 1);
