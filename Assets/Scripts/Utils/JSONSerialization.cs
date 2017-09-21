@@ -25,7 +25,6 @@ namespace Assets.Scripts.Utils
         {
             string newJson = "{ \"dict\": " + json + "}";
             Wrapper<T> wrapper = JSONSerialization<Wrapper<T>>.CreateFromJSON(newJson);
-            //Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(newJson);
             return wrapper.dict;
         }
 
