@@ -2,11 +2,11 @@ Temp/
 Library/
 Obj/
 Builds/
- 
+
  *.csproj
  *.unityproj
  *.sln
  *.user
  *.userprefs
  *.DS_store 
- *.vs/
+ 
