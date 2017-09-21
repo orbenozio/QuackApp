@@ -201,7 +201,7 @@ public class RegistrationManager : QuackMonoBehaviour
             // If exist in DB get the user data
             var aToken = AccessToken.CurrentAccessToken;
             
-            DatabaseService.Instance.GetUserDataEvent += OnGetUserDataEvent;
+            DatabaseService.Instance.GetUserDataEvent += handleGetUserDataEvent;
             DatabaseService.Instance.GetUserDataById(aToken.UserId);
         }
         else
@@ -210,9 +210,9 @@ public class RegistrationManager : QuackMonoBehaviour
         }
     }
 
-    private void OnGetUserDataEvent(bool result, User userData)
+    private void handleGetUserDataEvent(bool result, User userData)
     {
-        DatabaseService.Instance.GetUserDataEvent -= OnGetUserDataEvent;
+        DatabaseService.Instance.GetUserDataEvent -= handleGetUserDataEvent;
 
         if (userData == null)
         {
@@ -240,13 +240,13 @@ public class RegistrationManager : QuackMonoBehaviour
         Client.UserData.ActiveChats = new Dictionary<string, string>();
         Client.UserData.Invites = new Dictionary<string, string>();
 
-        DatabaseService.Instance.CreateUserDataEvent += OnCreateUserDataEvent;
+        DatabaseService.Instance.CreateUserDataEvent += handleCreateUserDataEvent;
         DatabaseService.Instance.CreateNewUser(Client.UserData);
     }
 
-    private void OnCreateUserDataEvent(bool result, User userData = null)
+    private void handleCreateUserDataEvent(bool result, User userData = null)
     {
-        DatabaseService.Instance.CreateUserDataEvent -= OnCreateUserDataEvent;
+        DatabaseService.Instance.CreateUserDataEvent -= handleCreateUserDataEvent;
 
         if (OnSignInEvent != null)
         {
