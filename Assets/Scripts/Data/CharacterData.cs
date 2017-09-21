@@ -9,6 +9,8 @@ namespace Assets.Scripts.Data
     {
         public string name;
 
+        public bool IsFullScreen;
+
         [JsonProperty("animation_controller")]
         public string animationController;
 

@@ -46,7 +46,7 @@ public class CharacterSlot_VC : QuackMonoBehaviour, ISlot
     {
         _characterData = data;
         _characterName.text = data.name;
-
+        
         AnimatorOverrideController slotOverrideController = (AnimatorOverrideController)Resources.Load("Animations\\Controllers\\" + _characterData.animationController);
         slotOverrideController.runtimeAnimatorController = _animator.runtimeAnimatorController;
 

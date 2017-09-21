@@ -15,5 +15,7 @@ namespace Assets.Scripts.Data
         public Vector2 Position;
         public string ChatRoomId;
         public CharacterData Data;
+        public bool IsFullScreen;
+
     }
 }

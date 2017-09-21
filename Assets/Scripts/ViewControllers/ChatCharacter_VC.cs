@@ -25,6 +25,13 @@ namespace Assets.Scripts.ViewControllers
 
         private ChatCharacterData _characterData;
 
+        protected override void OnStart()
+        {
+            base.OnStart();
+
+            _animator.SetTrigger("phase_1");
+        }
+
         public void Initialize(ChatCharacterData characterData)
         {
             _characterData = characterData;
@@ -80,7 +87,7 @@ namespace Assets.Scripts.ViewControllers
             // send audio to server
             var record = new RecordData();
             record.ClipSamples = ClipSamples;
-            record.UserId = AppManager.Instance.UserData.Id;
+            record.UserId = Client.UserData.Id;
             record.ChatRoomId = AppManager.Instance.ChatUuid;
             record.ChatCharacterKey = _characterData.Key;
 

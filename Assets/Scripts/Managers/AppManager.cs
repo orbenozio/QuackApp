@@ -161,6 +161,7 @@ public class AppManager : BaseSingleton<AppManager>
         }
     }
 
+   
     protected override void OnDestroyObject()
     {
         _registrationManager.OnSignInEvent -= registrationManager_OnSignInEvent;

@@ -275,19 +275,9 @@ public class DatabaseService : BaseSingleton<DatabaseService>
 
         _databaseRef.Child(DB_NODE_USERS).Child(user.Id).SetRawJsonValueAsync(json).ContinueWith(task =>
         {
-            User userData = null;
-
-            //if (task.IsCompleted)
-            //{
-            //    //userdata = JSONSerialization<User>.CreateFromJSON(task.Result.GetRawJsonValue());
-            //}
-            //else if (task.IsFaulted)
-            //{
-            //}
-
             if (CreateUserDataEvent != null)
             {
-                CreateUserDataEvent.Invoke(task.IsCompleted, userData);
+                CreateUserDataEvent.Invoke(task.IsCompleted);
             }
         });
     }
@@ -336,7 +326,7 @@ public class DatabaseService : BaseSingleton<DatabaseService>
 
     private void updateUserChatData(ChatData chatData)
     {
-        var user = AppManager.Instance.RegistrationManager.User;
+        var user = Client.UserData;
         _databaseRef.Child(DB_NODE_USERS).Child(user.Id).Child("ChatCount").SetValueAsync(++user.ChatCount);
         _databaseRef.Child(DB_NODE_USERS).Child(user.Id).Child("ActiveChats").Child(chatData.Uuid).SetValueAsync(chatData.ChatName);
     }

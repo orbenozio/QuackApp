@@ -19,15 +19,11 @@ public class ChatRoom_VC : BaseViewController
         _characters = new Dictionary<string, ChatCharacter_VC>();
 
         AppManager.Instance.ChatRoomManager.ChatCharacterDataEvent += ChatRoomManager_ChatCharacterDataEvent;
-
-        // Get chat room characters
     }
 
     protected override void OnStart()
     {
         base.OnStart();
-
-        // Get chat room characters
     }
 
     protected override void OnDestroyObject()

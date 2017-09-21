@@ -68,7 +68,7 @@ public class SceneCharacterSelectionManager : QuackMonoBehaviour
         chatCharacterData.UserId = Client.UserData.Id;
         chatCharacterData.CharacterId = name;
         chatCharacterData.Position = new Vector2(10f, 15f);
-        //chatCharacterData.Key = 
+        chatCharacterData.IsFullScreen = true;
         DatabaseService.Instance.SetUserChatCharacter(_currentChatData.Uuid, chatCharacterData);
     }    
 
