@@ -330,6 +330,7 @@
     <Compile Include="Assets\Scripts\Managers\UILoaderManager.cs" />
     <Compile Include="Assets\Scripts\SceneSlot.cs" />
     <Compile Include="Assets\Scripts\Utils\JSONSerialization.cs" />
+    <Compile Include="Assets\Scripts\Utils\PlayerPrefsHelper.cs" />
     <Compile Include="Assets\Scripts\Utils\QLogger.cs" />
     <Compile Include="Assets\Scripts\ViewControllers\CharacterSlot_VC.cs" />
     <Compile Include="Assets\Scripts\ViewControllers\ChatCharacter_VC.cs" />

@@ -154,7 +154,11 @@ public class AppManager : BaseSingleton<AppManager>
     protected override void OnStart()
     {
         _registrationManager.OnSignInEvent += registrationManager_OnSignInEvent;
-        _uiLoaderManager.SetActive(UILoaderManager.eUIType.Registration, true);
+
+        if (PlayerPrefsHelper.GetString(PlayerPrefsConsts.PP_LOGIN_METHOD) != PlayerPrefsConsts.PP_FACEBOOK_LOGIN)
+        {
+            _uiLoaderManager.SetActive(UILoaderManager.eUIType.Registration, true);
+        }
     }
 
     protected override void OnDestroyObject()

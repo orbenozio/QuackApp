@@ -79,6 +79,13 @@ public class RegistrationManager : QuackMonoBehaviour
     //    }
     //}
 
+    public bool IsLoggedIn
+    {
+        get
+        {
+            return FB.IsLoggedIn;
+        }
+    }
     #endregion
 
     #region Quack Mono Behaviour
@@ -96,7 +103,7 @@ public class RegistrationManager : QuackMonoBehaviour
         else
         {
             // Already initialized, signal an app activation App Event
-            FB.ActivateApp();
+            initCallback();
         }
     }
 
@@ -165,8 +172,28 @@ public class RegistrationManager : QuackMonoBehaviour
         {
             // Signal an app activation App Event
             FB.ActivateApp();
-            // Continue with Facebook SDK
-            // ...
+
+            if (PlayerPrefsHelper.GetString(PlayerPrefsConsts.PP_LOGIN_METHOD) == PlayerPrefsConsts.PP_FACEBOOK_LOGIN)
+            {
+                signInFacebook();
+            }
+
+            //if (FB.IsLoggedIn)
+            //{
+            //    // If exist in DB get the user data
+            //    var aToken = AccessToken.CurrentAccessToken;
+
+            //    DatabaseService.Instance.GetUserDataEvent += handleGetUserDataEvent;
+            //    DatabaseService.Instance.GetUserDataById(aToken.UserId);
+            //}
+            //else
+            //{
+            //    if (OnSignInEvent != null)
+            //    {
+
+            //    }
+            //}
+
         }
         else
         {
@@ -190,6 +217,7 @@ public class RegistrationManager : QuackMonoBehaviour
 
     private void signInFacebook()
     {
+     
         FB.LogInWithReadPermissions(FAECBOOK_READ_PERMISSIONS, authCallback);
     }
 
@@ -198,6 +226,8 @@ public class RegistrationManager : QuackMonoBehaviour
     {
         if (FB.IsLoggedIn)
         {
+            PlayerPrefsHelper.SetString(PlayerPrefsConsts.PP_LOGIN_METHOD, PlayerPrefsConsts.PP_FACEBOOK_LOGIN);
+
             // If exist in DB get the user data
             var aToken = AccessToken.CurrentAccessToken;
             
