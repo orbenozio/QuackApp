@@ -10,3 +10,4 @@ Builds/
  *.userprefs
  *.DS_store 
  
+.vs/
