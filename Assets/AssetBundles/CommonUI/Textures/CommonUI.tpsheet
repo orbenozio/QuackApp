@@ -1,0 +1,15 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# $TexturePacker:SmartUpdate:598deeb57418e877d03d444a312ceb46:93cf7c3d694cd68569804fd0a23d2492:b863a22d718e3ac0af50f4d8fe3bd2b9$
+#
+:format=40300
+:texture=CommonUI.png
+:size=1024x256
+:pivotpoints=enabled
+:borders=disabled
+
+login_fb_btn;1;110;706;145; 0.5;0.5; 0;0;0;0; 4;706;0;0;0;0;145;706;145; 2;1;2;3;0;1;3
